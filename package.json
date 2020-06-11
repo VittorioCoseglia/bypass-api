@@ -1,0 +1,28 @@
+{
+  "name": "bypass-api",
+  "version": "1.0.0",
+  "description": "bypass short urls instantly ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n0rmancodes/bypass-api.git"
+  },
+  "keywords": [
+    "univeral",
+    "bypass",
+    "bypass",
+    "unshorten"
+  ],
+  "author": "n0rmancodes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n0rmancodes/bypass-api/issues"
+  },
+  "homepage": "https://github.com/n0rmancodes/bypass-api#readme",
+  "dependencies": {
+    "needle": "^2.5.0"
+  }
+}
