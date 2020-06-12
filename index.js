@@ -5,7 +5,7 @@ const ue = require("expand-url");
 const fD = require('form-data');
 const c = require('cheerio');
 console.log("STARTING SERVER...");
-h.createServer(onRequest).listen(3000);
+h.createServer(onRequest).listen(process.env.PORT || 3000);
 console.log("STARTED!")
 
 function onRequest(request,res) {
