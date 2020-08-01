@@ -3,7 +3,7 @@ const h = require("http");
 const u = require("url");
 const ue = require("expand-url");
 const fD = require('form-data');
-const c = require('cheerio');
+const cheerio = require('cheerio');
 const g = require('got')
 console.log("STARTING SERVER...");
 h.createServer(onRequest).listen(process.env.PORT || 3000);
@@ -42,7 +42,7 @@ function onRequest(request,res) {
 					if (j.valid == true) {
 						var d = JSON.stringify({
 							"link":j.destination,
-							"resolvedUsing":"apimon-generic"
+							"resolvedUsing":"apimon-bitly"
 						})
 						res.writeHead(200, {
 							"Content-Type": "application/json",
@@ -66,7 +66,6 @@ function onRequest(request,res) {
 				var a = $(this)
 				if (a.attr('name') == "_token") {
 					var k = a.val()
-					
 					var hdrs = {
 						"Host": "www.google.com",
 						"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0",
@@ -114,7 +113,12 @@ function onRequest(request,res) {
 			var b = "https://linkvertise.net/api/v1/redirect/link" + p + "/target?serial=" + Buffer.from(JSON.stringify(k)).toString("base64");
 			g(b, options).then(function(response) {
 				var r = JSON.parse(response.body);
-				var link = decodeURIComponent(r.data.target.split("&k=")[1].split("&subid=")[0])
+				console.log(r.data.target);
+				if (!link.includes("https://lv-download.de")) {
+					var link = decodeURIComponent(r.data.target.split("&k=")[1].split("&subid=")[0])
+				} else {
+					var link = r.data.target;
+				}
 				var d = JSON.stringify({
 					"link":link,
 					"resolvedUsing":"linkvertise-script"
@@ -126,13 +130,42 @@ function onRequest(request,res) {
 				res.end(d)
 			})
 		})
+	} else if (l.includes("boost.ink")) {
+		var options = {headers:{
+			"Accept":"*/*",
+			"Accept-Encoding":"gzip, deflate, br",
+			"Accept-Language":"en-US,en;q=0.5",
+			"Connection":"keep-alive",
+			"DNT":"1",
+			"Upgrade-Insecure-Requests":"1",
+			"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
+		}}
+		g(l).then(function(response) {
+			var $ = cheerio.load(response.body);
+			for (var c in $("script")) {
+				if ($("script")[c].attribs) {
+					var d = $("script")[c].attribs.version
+					var link = Buffer.from(d, 'base64')
+					var dc = link.toString('utf8');
+					var d = JSON.stringify({
+						"link":dc,
+						"resolvedUsing":"boost"
+					})
+					res.writeHead(200, {
+						"Content-Type": "application/json",
+						"Access-Control-Allow-Origin": "*"
+					});
+					res.end(d);
+				}
+			}
+		})
 	} else {
 		n("https://apimon.de/redirect/" + l, function (error, response) {
 			var j = response.body;
 			if (j.valid == true) {
 				var d = JSON.stringify({
 					"link":j.destination,
-					"resolvedUsing":"apimon-generic"
+					"resolvedUsing":"apimon-bitly"
 				})
 				res.writeHead(200, {
 					"Content-Type": "application/json",
