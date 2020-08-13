@@ -110,7 +110,6 @@ function onRequest(request,res) {
 			var b = "https://linkvertise.net/api/v1/redirect/link" + p + "/target?serial=" + Buffer.from(JSON.stringify(k)).toString("base64");
 			g(b, options).then(function(response) {
 				var r = JSON.parse(response.body);
-				console.log(r.data.target);
 				if (!r.data.target.includes("https://lv-download.de")) {
 					var link = decodeURIComponent(r.data.target.split("&k=")[1].split("&subid=")[0])
 				} else {
