@@ -2,9 +2,8 @@ const n = require("needle");
 const h = require("http");
 const u = require("url");
 const ue = require("expand-url");
-const fD = require('form-data');
 const cheerio = require('cheerio');
-const g = require('got')
+const g = require('got');
 console.log("STARTING SERVER...");
 h.createServer(onRequest).listen(process.env.PORT || 3002);
 console.log("STARTED!");
@@ -146,7 +145,6 @@ function onRequest(request,res) {
 				if ($("script")[c].attribs) {
 					var d = $("script")[c].attribs.version
 					if ($("script")[c].attribs.version) {
-						console.log(d)
 						var link = Buffer.from(d, "base64")
 						var dc = link.toString('utf8');
 						var d = JSON.stringify({
@@ -161,6 +159,35 @@ function onRequest(request,res) {
 					}
 				}
 			}
+		})
+	} else if (l.includes("intercelestial.com")) {
+		// wip
+		res.end("wip");
+		g("https://intercelestial.com/?id=bWRJaHlUaHVTR2N4aGVoSmJLU3lnTE82Tzd3cWM2OTRibExVNGs4ZStnNWpIWUtGRWE2UktGVWR3ZFVoN2FURHU5b1lTQStiZzhscXhEM3MwdVZiSWc9PQ==",
+		 {
+			headers:{
+				"Host": "intercelestial.com",
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
+				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+				"Accept-Language": "en-US,en;q=0.5",
+				"Accept-Encoding": "gzip, deflate, br",
+				"Content-Type": "application/x-www-form-urlencoded",
+				"Origin": "null",
+				"Connection": "keep-alive",
+				"Upgrade-Insecure-Requests": "1"
+			} 
+		 }).then(function (response) {
+			var $ = cheerio.load(response.body);
+			var wp1 = $("body form input")[0].attribs.value;
+			var href = $("body form input")[1].attribs.value;
+			var user = $("body form input")[2].attribs.value;
+			var lemme = $("body form input")[3].attribs.value;
+			var postL = $("body form input")[4].attribs.value;
+			var postData = "_wpnonce=" + wp1 + "&_wp_http_referer=" + href + "&userid=" + user + "&lemmein=" + lemme + "&post_location=" + postL;
+			//g.post("https://intercelestial.com/", postData).then(function(response) {
+			//	var $ = cheerio.load(response.body);
+			//	console.log($("#_wpnonce")[0].attribs)
+			//})
 		})
 	} else {
 		n("https://apimon.de/redirect/" + l, function (error, response) {
