@@ -7,7 +7,7 @@ const cheerio = require('cheerio');
 const g = require('got')
 console.log("STARTING SERVER...");
 h.createServer(onRequest).listen(process.env.PORT || 3000);
-console.log("STARTED!")
+console.log("STARTED!");
 
 function onRequest(request,res) {
 	var ul = u.parse(request.url,true);
