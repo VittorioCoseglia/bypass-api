@@ -111,14 +111,14 @@ function onRequest(request,res) {
 			g(b, options).then(function(response) {
 				var r = JSON.parse(response.body);
 				console.log(r.data.target);
-				if (!link.includes("https://lv-download.de")) {
+				if (!r.data.target.includes("https://lv-download.de")) {
 					var link = decodeURIComponent(r.data.target.split("&k=")[1].split("&subid=")[0])
 				} else {
 					var link = r.data.target;
 				}
 				var d = JSON.stringify({
 					"link":link,
-					"resolvedUsing":"linkvertise-script"
+					"resolvedUsing":"linkvertise-resolver"
 				})
 				res.writeHead(200, {
 					"Content-Type": "application/json",
