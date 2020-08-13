@@ -9,10 +9,8 @@ h.createServer(onRequest).listen(process.env.PORT || 3002);
 console.log("STARTED!");
 
 function onRequest(request,res) {
-	var ul = u.parse(request.url,true);
+	var ul = u.parse(request.url, true);
 	var l = ul.query.url;
-	
-	
 	if (!l) {
 		var d = JSON.stringify({
 			"err":"noUrlFound",
@@ -188,6 +186,35 @@ function onRequest(request,res) {
 			//	var $ = cheerio.load(response.body);
 			//	console.log($("#_wpnonce")[0].attribs)
 			//})
+		})
+	} else if (l.includes("http://adf.ly")) {
+		// wip
+		res.end("wip");
+		n("https://apimon.de/redirect/" + l, function (error, response) {
+			if (response.body.valid == true) {
+				n(response.body.destination, function(err, response) {
+					console.log(response.statusCode)
+					var $ = cheerio.load(response.body);
+					for (var c in $("head meta")) {
+						if ($("head meta")[c].attribs) {
+							if ($("head meta")[c].attribs.name == "x-adfly-subid") {
+								var ppi = $("head meta")[c].attribs.content;
+								console.log(ppi);
+							}
+						}
+					} 
+					for (var c in $("script")) {
+						if ($("script")[c].attribs && $("script")[c].attribs.type == "text/javascript") {
+							if ($("script")[c].children[0].data.toString().includes("urid")) {
+								var pci = $("script")[c].children[0].data.split("var urid = '")[1].split("';")[0];
+								console.log(pci);
+							}
+						}
+					}
+					var t = + new Date();
+					console.log(t);
+				})
+			}
 		})
 	} else {
 		n("https://apimon.de/redirect/" + l, function (error, response) {
