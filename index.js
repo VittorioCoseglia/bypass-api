@@ -6,7 +6,7 @@ const fD = require('form-data');
 const cheerio = require('cheerio');
 const g = require('got')
 console.log("STARTING SERVER...");
-h.createServer(onRequest).listen(process.env.PORT || 3000);
+h.createServer(onRequest).listen(process.env.PORT || 3002);
 console.log("STARTED!");
 
 function onRequest(request,res) {
