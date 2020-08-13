@@ -145,17 +145,20 @@ function onRequest(request,res) {
 			for (var c in $("script")) {
 				if ($("script")[c].attribs) {
 					var d = $("script")[c].attribs.version
-					var link = Buffer.from(d, 'base64')
-					var dc = link.toString('utf8');
-					var d = JSON.stringify({
-						"link":dc,
-						"resolvedUsing":"boost"
-					})
-					res.writeHead(200, {
-						"Content-Type": "application/json",
-						"Access-Control-Allow-Origin": "*"
-					});
-					res.end(d);
+					if ($("script")[c].attribs.version) {
+						console.log(d)
+						var link = Buffer.from(d, "base64")
+						var dc = link.toString('utf8');
+						var d = JSON.stringify({
+							"link":dc,
+							"resolvedUsing":"boost-resolver"
+						})
+						res.writeHead(200, {
+							"Content-Type": "application/json",
+							"Access-Control-Allow-Origin": "*"
+						});
+						res.end(d);
+					}
 				}
 			}
 		})
