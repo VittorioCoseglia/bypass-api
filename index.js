@@ -20,32 +20,18 @@ function onRequest(request,res) {
 		});
 		res.end(d);
 	} else if (l.includes("bit.ly") | l.includes("goo.gl")) {
-		ue.expand(l, function (err, longUrl) {
-			if (longUrl && !err) {
+		g("https://apimon.de/redirect/" + l).then(function(response) {
+			var j = JSON.parse(response.body);
+			if (j.valid == true) {
 				var d = JSON.stringify({
-					"link":longUrl,
-					"resolvedUsing":"expand-url"
+					"link":j.destination,
+					"resolvedUsing":"apimon-bitly"
 				})
 				res.writeHead(200, {
 					"Content-Type": "application/json",
 					"Access-Control-Allow-Origin": "*"
 				});
-				res.end(d);
-			} else {
-				g("https://apimon.de/redirect/" + l).then(function(response) {
-					var j = JSON.parse(response.body);
-					if (j.valid == true) {
-						var d = JSON.stringify({
-							"link":j.destination,
-							"resolvedUsing":"apimon-bitly"
-						})
-						res.writeHead(200, {
-							"Content-Type": "application/json",
-							"Access-Control-Allow-Origin": "*"
-						});
-						res.end(d);
-					}
-				})
+				res.end(d);				
 			}
 		})
 	} else if (l.includes("linkvertise.com") | l.includes("linkvertise.net") | l.includes("direct-link.net") | l.includes("file-link.net") | l.includes("up-to-down.net") | l.includes("link-to.net")) {
@@ -133,8 +119,6 @@ function onRequest(request,res) {
 				}
 			}
 		})
-	} else if (l.includes("shortly.xyz")) {
-		g.post()
 	} else {
 		g("https://apimon.de/redirect/" + l).then(function(response) {
 			var j = JSON.parse(response.body);
