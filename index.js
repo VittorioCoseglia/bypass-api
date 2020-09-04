@@ -1,6 +1,5 @@
 const h = require("http");
 const u = require("url");
-const ue = require("expand-url");
 const cheerio = require('cheerio');
 const g = require('got');
 console.log("STARTING SERVER...");
@@ -66,7 +65,7 @@ function onRequest(request,res) {
 			"Upgrade-Insecure-Requests":"1",
 			"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
 		}}
-		let k = {timestamp:new Date().getTime(),random:"375123"}
+		let k = {timestamp:new Date().getTime(),random:"6548307"}
 		var ur = u.parse(l,true);
 		var p = ur.pathname;
 		var a = "https://linkvertise.net/api/v1/redirect/link/static" + p;
@@ -134,64 +133,8 @@ function onRequest(request,res) {
 				}
 			}
 		})
-	} else if (l.includes("intercelestial.com")) {
-		// wip
-		res.end("wip");
-		g("https://intercelestial.com/?id=bWRJaHlUaHVTR2N4aGVoSmJLU3lnTE82Tzd3cWM2OTRibExVNGs4ZStnNWpIWUtGRWE2UktGVWR3ZFVoN2FURHU5b1lTQStiZzhscXhEM3MwdVZiSWc9PQ==",
-		 {
-			headers:{
-				"Host": "intercelestial.com",
-				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
-				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-				"Accept-Language": "en-US,en;q=0.5",
-				"Accept-Encoding": "gzip, deflate, br",
-				"Content-Type": "application/x-www-form-urlencoded",
-				"Origin": "null",
-				"Connection": "keep-alive",
-				"Upgrade-Insecure-Requests": "1"
-			} 
-		 }).then(function (response) {
-			var $ = cheerio.load(response.body);
-			var wp1 = $("body form input")[0].attribs.value;
-			var href = $("body form input")[1].attribs.value;
-			var user = $("body form input")[2].attribs.value;
-			var lemme = $("body form input")[3].attribs.value;
-			var postL = $("body form input")[4].attribs.value;
-			var postData = "_wpnonce=" + wp1 + "&_wp_http_referer=" + href + "&userid=" + user + "&lemmein=" + lemme + "&post_location=" + postL;
-			//g.post("https://intercelestial.com/", postData).then(function(response) {
-			//	var $ = cheerio.load(response.body);
-			//	console.log($("#_wpnonce")[0].attribs)
-			//})
-		})
-	} else if (l.includes("http://adf.ly")) {
-		// wip
-		res.end("wip");
-		g("https://apimon.de/redirect/" + l).then(function (response) {
-			if (response.body.valid == true) {
-				n(response.body.destination, function(err, response) {
-					console.log(response.statusCode)
-					var $ = cheerio.load(response.body);
-					for (var c in $("head meta")) {
-						if ($("head meta")[c].attribs) {
-							if ($("head meta")[c].attribs.name == "x-adfly-subid") {
-								var ppi = $("head meta")[c].attribs.content;
-								console.log(ppi);
-							}
-						}
-					} 
-					for (var c in $("script")) {
-						if ($("script")[c].attribs && $("script")[c].attribs.type == "text/javascript") {
-							if ($("script")[c].children[0].data.toString().includes("urid")) {
-								var pci = $("script")[c].children[0].data.split("var urid = '")[1].split("';")[0];
-								console.log(pci);
-							}
-						}
-					}
-					var t = + new Date();
-					console.log(t);
-				})
-			}
-		})
+	} else if (l.includes("shortly.xyz")) {
+		g.post()
 	} else {
 		g("https://apimon.de/redirect/" + l).then(function(response) {
 			var j = JSON.parse(response.body);
