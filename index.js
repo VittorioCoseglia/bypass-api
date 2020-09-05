@@ -7,7 +7,8 @@ h.createServer(onRequest).listen(process.env.PORT || 3002);
 function onRequest(req, res) {
     var ul = u.parse(req.url, true);
     var path = Buffer.from(ul.pathname.split("/").slice(1)[0], "base64").toString();
-    var l = u.parse(path, true);
+	var l = u.parse(path, true);
+	console.log(l.hostname)
     if (path == "") {
         var d = JSON.stringify({
 			"err":"noUrlFound",
@@ -19,12 +20,6 @@ function onRequest(req, res) {
 		});
 		res.end(d);
     } else if (l.hostname == "linkvertise.net" | l.hostname == "linkvertise.com") {
-        if (!l.hostname.includes("linkvertise")) {
-			g("https://apimon.de/redirect/" + l).then(function(response) {
-				var j = JSON.parse(response.body);
-				var l = j.destination;
-			})
-		}
 		var options = { headers: {
 			"Accept":"*/*",
 			"Accept-Encoding":"gzip, deflate, br",
@@ -36,7 +31,7 @@ function onRequest(req, res) {
 			"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
 		}}
 		let k = {timestamp:new Date().getTime(),random:"6548307"}
-		var ur = u.parse(l,true);
+		var ur = u.parse(lk,true);
 		var p = ur.pathname;
 		var a = "https://linkvertise.net/api/v1/redirect/link/static" + p;
 		g(a, options).then(function (response) {
@@ -135,15 +130,48 @@ function onRequest(req, res) {
 				res.end(d);
 			})
 		})
+	} else if (l.hostname == "sub2unlock.com") {
+		g(path).then(function (response) {
+			var $ = cheerio.load(response.body);
+			var link = $("#theGetLink").text();
+			var d = JSON.stringify({
+				"link": link,
+				"resolvedUsing": "sub2Resolver"
+			})
+			res.writeHead(200, {
+				"Content-Type": "application/json",
+				"Access-Control-Allow-Origin": "*"
+			});
+			res.end(d);
+		})
+	} else if (l.hostname == "www.shortconnect.com" | l.hostname == "shortconnect.com") {
+		g(path).then(function (response) {
+			var $ = cheerio.load(response.body);
+			var link = $("#loader-link")[0].attribs.href;
+			var d = JSON.stringify({
+				"link": link,
+				"resolvedUsing": "sub2Resolver"
+			})
+			res.writeHead(200, {
+				"Content-Type": "application/json",
+				"Access-Control-Allow-Origin": "*"
+			});
+			res.end(d);
+		})
 	} else {
-        var p = "https://apimon.de/redirect/" + path
+        var p = "https://apimon.de/redirect/" + path;
         g(p).then(function (response) {
             var b = JSON.parse(response.body);
             if (b.valid == true) {
                 var d = JSON.stringify({
                     "link": b.destination,
                     "resolvedUsing": "generic-apimon"
-                })
+				})
+				res.writeHead(200, {
+					"Content-Type": "application/json",
+					"Access-Control-Allow-Origin": "*"
+				});
+				res.end(d);
             }
         })
     }
