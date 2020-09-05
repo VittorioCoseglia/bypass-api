@@ -2,7 +2,11 @@ const h = require("http");
 const u = require("url");
 const g = require('got');
 const cheerio = require('cheerio');
+const version = "1.1";
 h.createServer(onRequest).listen(process.env.PORT || 3002);
+console.clear();
+console.log("bypassAPI v" + version);
+console.log("===============================")
 
 function onRequest(req, res) {
     var ul = u.parse(req.url, true);
@@ -11,7 +15,7 @@ function onRequest(req, res) {
     if (path == "") {
         var d = JSON.stringify({
 			"err":"noUrlFound",
-			"version":"1.0"
+			"version":version
 		})
 		res.writeHead(404, {
 			"Content-Type": "application/json",
