@@ -8,7 +8,6 @@ function onRequest(req, res) {
     var ul = u.parse(req.url, true);
     var path = Buffer.from(ul.pathname.split("/").slice(1)[0], "base64").toString();
 	var l = u.parse(path, true);
-	console.log(l.hostname)
     if (path == "") {
         var d = JSON.stringify({
 			"err":"noUrlFound",
@@ -67,7 +66,7 @@ function onRequest(req, res) {
 				res.end(d)
 			})
 		})
-    } else if (l.hostname == "boost.ink" | l.hostname == "bst.gg" | l.hostname == "booo.st") {
+    } else if (l.hostname == "boost.ink" | l.hostname == "bst.gg" | l.hostname == "booo.st" | l.hostname == "bst.wtf") {
         var options = {headers:{
 			"Accept":"*/*",
 			"Accept-Encoding":"gzip, deflate, br",
