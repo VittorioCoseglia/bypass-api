@@ -34,7 +34,7 @@ function onRequest(req, res) {
 			"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
 		}}
 		let k = {timestamp:new Date().getTime(),random:"6548307"}
-		var ur = u.parse(lk,true);
+		var ur = u.parse(l,true);
 		var p = ur.pathname;
 		var a = "https://linkvertise.net/api/v1/redirect/link/static" + p;
 		g(a, options).then(function (response) {
