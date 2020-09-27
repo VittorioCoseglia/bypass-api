@@ -9,8 +9,9 @@ console.log("bypassAPI v" + version);
 console.log("===============================")
 
 function onRequest(req, res) {
-    var ul = u.parse(req.url, true);
-    var path = Buffer.from(ul.pathname.split("/").slice(1)[0], "base64").toString();
+	var ul = u.parse(req.url, true);
+	var path = ul.pathname.substring(1);
+	var path = Buffer.from(path, "base64").toString();
 	var l = u.parse(path, true);
     if (path == "") {
         var d = JSON.stringify({
@@ -39,15 +40,29 @@ function onRequest(req, res) {
 		var a = "https://linkvertise.net/api/v1/redirect/link/static" + p;
 		g(a, options).then(function (response) {
 			if (response.body.substring(0,1) == "<") {
-				var d = JSON.stringify({
-					"err": "couldNotResolve"
-				})
-				res.writeHead(404, {
-					"Content-Type": "application/json",
-					"Access-Control-Allow-Origin": "*"
-				});
-				res.end(d);
-				return;
+				if (ur.query.r) {
+					var link = Buffer.from(ur.query.r, "base64").toString();
+					var d = JSON.stringify({
+						"link":link,
+						"resolvedUsing":"linkvertise-alt-resolver"
+					})
+					res.writeHead(200, {
+						"Content-Type": "application/json",
+						"Access-Control-Allow-Origin": "*"
+					});
+					res.end(d);
+					return;
+				} else {
+					var d = JSON.stringify({
+						"err": "couldNotResolve"
+					})
+					res.writeHead(404, {
+						"Content-Type": "application/json",
+						"Access-Control-Allow-Origin": "*"
+					});
+					res.end(d);
+					return;
+				}
 			}
 			var r = JSON.parse(response.body);
 			k.link_id = r.data.link.id;
